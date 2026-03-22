@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>お絵かきアプリ & キャラ移動アプリ</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      background: #f5f7fb;
+      color: #222;
+    }
+    header {
+      background: #ffffff;
+      padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    p.lead {
+      margin: 6px 0 0;
+      color: #555;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      padding: 18px;
+    }
+    .card h2 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    button, input[type="color"], input[type="range"] {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+    .sub-btn {
+      background: #64748b;
+    }
+    .danger {
+      background: #dc2626;
+    }
+    .hint {
+      font-size: 13px;
+      color: #666;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+    canvas {
+      width: 100%;
+      max-width: 100%;
+      border: 2px solid #dbe3ef;
+      border-radius: 14px;
+      background: white;
+      touch-action: none;
+      display: block;
+    }
+    .game-area {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      border: 2px solid #dbe3ef;
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(#dff3ff, #f8fbff 60%, #dcfce7 60%, #bbf7d0 100%);
+    }
+    .character {
+      position: absolute;
+      left: 40px;
+      bottom: 40px;
+      font-size: 54px;
+      user-select: none;
+      transition: transform 0.08s linear;
+    }
+    .item {
+      position: absolute;
+      right: 32px;
+      bottom: 42px;
+      font-size: 42px;
+    }
+    .status {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+      font-weight: 600;
+    }
+    .control-pad {
+      display: grid;
+      grid-template-columns: repeat(3, 70px);
+      gap: 8px;
+      justify-content: center;
+      margin-top: 12px;
+    }
+    .control-pad button {
+      min-height: 52px;
+      font-size: 18px;
+      padding: 0;
+    }
+    .wide {
+      grid-column: span 3;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HTMLだけで作るミニアプリ</h1>
+    <p class="lead">お絵かきアプリと、ボタンでキャラが動くアプリのサンプルです。</p>
+  </header>
+
+  <div class="container">
+    <section class="card">
+      <h2>① お絵かきアプリ</h2>
+      <div class="toolbar">
+        <label>色 <input type="color" id="colorPicker" value="#000000"></label>
+        <label>太さ <input type="range" id="brushSize" min="1" max="30" value="5"></label>
+        <button id="eraserBtn" class="sub-btn">消しゴム</button>
+        <button id="clearBtn" class="danger">全部けす</button>
+      </div>
+      <canvas id="drawCanvas" width="520" height="420"></canvas>
+      <div class="hint">
+        マウスや指で自由にお絵かきできます。<br>
+        色や太さを変えたり、消しゴムにしたりできます。
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>② キャラ移動アプリ</h2>
+      <div class="status">
+        <div>スコア: <span id="score">0</span></div>
+        <div>キャラ: <span id="currentChar">🐱</span></div>
+        <div>アイテム: ⭐ を取ろう</div>
+      </div>
+      <div class="toolbar">
+        <button id="charCat">🐱 ねこ</button>
+        <button id="charRobot" class="sub-btn">🤖 ロボ</button>
+        <button id="charGhost" class="sub-btn">👻 おばけ</button>
+        <button id="resetGame" class="danger">リセット</button>
+      </div>
+      <div class="game-area" id="gameArea">
+        <div class="character" id="character">🐱</div>
+        <div class="item" id="item">⭐</div>
+      </div>
+      <div class="control-pad">
+        <div></div>
+        <button id="upBtn">↑</button>
+        <div></div>
+        <button id="leftBtn">←</button>
+        <button id="downBtn">↓</button>
+        <button id="rightBtn">→</button>
+        <button id="jumpBtn" class="wide">ジャンプ</button>
+      </div>
+      <div class="hint">
+        ボタンかキーボードの矢印キーで動かせます。<br>
+        キャラが⭐に触れるとスコアが増えて、星の場所が変わります。
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ===== お絵かきアプリ =====
+    const canvas = document.getElementById('drawCanvas');
+    const ctx = canvas.getContext('2d');
+    const colorPicker = document.getElementById('colorPicker');
+    const brushSize = document.getElementById('brushSize');
+    const eraserBtn = document.getElementById('eraserBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    let drawing = false;
+    let currentColor = colorPicker.value;
+    let currentSize = brushSize.value;
+    let eraserMode = false;
+
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    function getCanvasPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const isTouch = e.touches && e.touches[0];
+      const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+      const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * (canvas.width / rect.width),
+        y: (clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    function startDraw(e) {
+      drawing = true;
+      const pos = getCanvasPos(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+      e.preventDefault();
+    }
+
+    function draw(e) {
+      if (!drawing) return;
+      const pos = getCanvasPos(e);
+      ctx.strokeStyle = eraserMode ? '#ffffff' : currentColor;
+      ctx.lineWidth = currentSize;
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      e.preventDefault();
+    }
+
+    function endDraw() {
+      drawing = false;
+      ctx.beginPath();
+    }
+
+    colorPicker.addEventListener('input', () => {
+      currentColor = colorPicker.value;
+      eraserMode = false;
+      eraserBtn.textContent = '消しゴム';
+      eraserBtn.className = 'sub-btn';
+    });
+
+    brushSize.addEventListener('input', () => {
+      currentSize = brushSize.value;
+    });
+
+    eraserBtn.addEventListener('click', () => {
+      eraserMode = !eraserMode;
+      eraserBtn.textContent = eraserMode ? 'ペンにもどす' : '消しゴム';
+      eraserBtn.className = eraserMode ? '' : 'sub-btn';
+    });
+
+    clearBtn.addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    });
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mouseleave', endDraw);
+    canvas.addEventListener('touchstart', startDraw, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', endDraw);
+
+    // ===== キャラ移動アプリ =====
+    const gameArea = document.getElementById('gameArea');
+    const character = document.getElementById('character');
+    const item = document.getElementById('item');
+    const scoreEl = document.getElementById('score');
+    const currentCharEl = document.getElementById('currentChar');
+
+    let posX = 40;
+    let posY = 40;
+    let score = 0;
+    const step = 20;
+
+    function updateCharacter() {
+      character.style.left = posX + 'px';
+      character.style.bottom = posY + 'px';
+      checkHit();
+    }
+
+    function move(dx, dy) {
+      const maxX = gameArea.clientWidth - 70;
+      const maxY = gameArea.clientHeight - 80;
+      posX = Math.max(0, Math.min(maxX, posX + dx));
+      posY = Math.max(0, Math.min(maxY, posY + dy));
+      updateCharacter();
+    }
+
+    function randomizeItem() {
+      const maxX = gameArea.clientWidth - 80;
+      const maxY = gameArea.clientHeight - 90;
+      const x = Math.floor(Math.random() * maxX);
+      const y = Math.floor(Math.random() * maxY);
+      item.style.left = x + 'px';
+      item.style.bottom = y + 'px';
+      item.style.right = 'auto';
+    }
+
+    function checkHit() {
+      const charRect = character.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+
+      const hit = !(
+        charRect.right < itemRect.left ||
+        charRect.left > itemRect.right ||
+        charRect.bottom < itemRect.top ||
+        charRect.top > itemRect.bottom
+      );
+
+      if (hit) {
+        score++;
+        scoreEl.textContent = score;
+        randomizeItem();
+      }
+    }
+
+    function jump() {
+      character.style.transform = 'translateY(-40px)';
+      setTimeout(() => {
+        character.style.transform = 'translateY(0)';
+      }, 250);
+    }
+
+    document.getElementById('leftBtn').addEventListener('click', () => move(-step, 0));
+    document.getElementById('rightBtn').addEventListener('click', () => move(step, 0));
+    document.getElementById('upBtn').addEventListener('click', () => move(0, step));
+    document.getElementById('downBtn').addEventListener('click', () => move(0, -step));
+    document.getElementById('jumpBtn').addEventListener('click', jump);
+
+    document.getElementById('charCat').addEventListener('click', () => setCharacter('🐱'));
+    document.getElementById('charRobot').addEventListener('click', () => setCharacter('🤖'));
+    document.getElementById('charGhost').addEventListener('click', () => setCharacter('👻'));
+    document.getElementById('resetGame').addEventListener('click', resetGame);
+
+    function setCharacter(char) {
+      character.textContent = char;
+      currentCharEl.textContent = char;
+    }
+
+    function resetGame() {
+      posX = 40;
+      posY = 40;
+      score = 0;
+      scoreEl.textContent = score;
+      updateCharacter();
+      randomizeItem();
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') move(-step, 0);
+      if (e.key === 'ArrowRight') move(step, 0);
+      if (e.key === 'ArrowUp') move(0, step);
+      if (e.key === 'ArrowDown') move(0, -step);
+      if (e.key === ' ' || e.key === 'Enter') jump();
+    });
+
+    window.addEventListener('load', () => {
+      updateCharacter();
+      randomizeItem();
+    });
+  </script>
+</body>
+</html>
