@@ -1,5 +1,20 @@
 [
   {
+    "id": "morning",
+    "label": "あさ",
+    "image": "morning.svg"
+  },
+  {
+    "id": "daytime",
+    "label": "ひる",
+    "image": "daytime.svg"
+  },
+  {
+    "id": "night",
+    "label": "よる",
+    "image": "night.svg"
+  },
+  {
     "id": "wake_up",
     "label": "おきる",
     "image": "wake_up.svg"
@@ -153,6 +168,26 @@
     "id": "rest",
     "label": "やすむ",
     "image": "rest.svg"
+  },
+  {
+    "id": "station",
+    "label": "えき",
+    "image": "station.svg"
+  },
+  {
+    "id": "ticket",
+    "label": "きっぷ",
+    "image": "ticket.svg"
+  },
+  {
+    "id": "arrive",
+    "label": "とうちゃく",
+    "image": "arrive.svg"
+  },
+  {
+    "id": "home",
+    "label": "おうち",
+    "image": "home.svg"
   },
   {
     "id": "custom",
