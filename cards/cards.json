@@ -1,0 +1,197 @@
+[
+  {
+    "id": "morning",
+    "label": "あさ",
+    "image": "morning.svg"
+  },
+  {
+    "id": "daytime",
+    "label": "ひる",
+    "image": "daytime.svg"
+  },
+  {
+    "id": "night",
+    "label": "よる",
+    "image": "night.svg"
+  },
+  {
+    "id": "wake_up",
+    "label": "おきる",
+    "image": "wake_up.svg"
+  },
+  {
+    "id": "change_clothes",
+    "label": "きがえる",
+    "image": "change_clothes.svg"
+  },
+  {
+    "id": "fold_clothes",
+    "label": "ふくをたたむ",
+    "image": "fold_clothes.svg"
+  },
+  {
+    "id": "wash_face",
+    "label": "かおをあらう",
+    "image": "wash_face.svg"
+  },
+  {
+    "id": "breakfast",
+    "label": "あさごはん",
+    "image": "breakfast.svg"
+  },
+  {
+    "id": "brush_teeth",
+    "label": "はみがき",
+    "image": "brush_teeth.svg"
+  },
+  {
+    "id": "smartphone",
+    "label": "スマホ",
+    "image": "smartphone.svg"
+  },
+  {
+    "id": "play",
+    "label": "あそぶ",
+    "image": "play.svg"
+  },
+  {
+    "id": "free_time",
+    "label": "じゆうじかん",
+    "image": "free_time.svg"
+  },
+  {
+    "id": "lunch",
+    "label": "ひるごはん",
+    "image": "lunch.svg"
+  },
+  {
+    "id": "after_school_day",
+    "label": "ほうかごデイ",
+    "image": "after_school_day.svg"
+  },
+  {
+    "id": "school",
+    "label": "がっこう",
+    "image": "school.svg"
+  },
+  {
+    "id": "hospital",
+    "label": "びょういん",
+    "image": "hospital.svg"
+  },
+  {
+    "id": "go_out",
+    "label": "おでかけ",
+    "image": "go_out.svg"
+  },
+  {
+    "id": "toilet",
+    "label": "トイレ",
+    "image": "toilet.svg"
+  },
+  {
+    "id": "bath",
+    "label": "おふろ",
+    "image": "bath.svg"
+  },
+  {
+    "id": "dinner",
+    "label": "よるごはん",
+    "image": "dinner.svg"
+  },
+  {
+    "id": "sleep",
+    "label": "ねる",
+    "image": "sleep.svg"
+  },
+  {
+    "id": "medicine",
+    "label": "くすり",
+    "image": "medicine.svg"
+  },
+  {
+    "id": "tv",
+    "label": "テレビ",
+    "image": "tv.svg"
+  },
+  {
+    "id": "homework",
+    "label": "べんきょう",
+    "image": "homework.svg"
+  },
+  {
+    "id": "snack",
+    "label": "おやつ",
+    "image": "snack.svg"
+  },
+  {
+    "id": "shopping",
+    "label": "かいもの",
+    "image": "shopping.svg"
+  },
+  {
+    "id": "walk",
+    "label": "さんぽ",
+    "image": "walk.svg"
+  },
+  {
+    "id": "car",
+    "label": "くるま",
+    "image": "car.svg"
+  },
+  {
+    "id": "bus",
+    "label": "バス",
+    "image": "bus.svg"
+  },
+  {
+    "id": "train",
+    "label": "でんしゃ",
+    "image": "train.svg"
+  },
+  {
+    "id": "music",
+    "label": "おんがく",
+    "image": "music.svg"
+  },
+  {
+    "id": "cleanup",
+    "label": "かたづけ",
+    "image": "cleanup.svg"
+  },
+  {
+    "id": "drink",
+    "label": "のむ",
+    "image": "drink.svg"
+  },
+  {
+    "id": "rest",
+    "label": "やすむ",
+    "image": "rest.svg"
+  },
+  {
+    "id": "station",
+    "label": "えき",
+    "image": "station.svg"
+  },
+  {
+    "id": "ticket",
+    "label": "きっぷ",
+    "image": "ticket.svg"
+  },
+  {
+    "id": "arrive",
+    "label": "とうちゃく",
+    "image": "arrive.svg"
+  },
+  {
+    "id": "home",
+    "label": "おうち",
+    "image": "home.svg"
+  },
+  {
+    "id": "custom",
+    "label": "そのほか",
+    "image": "custom.svg"
+  }
+]
