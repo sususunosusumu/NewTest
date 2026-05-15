@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>きょうのよていボード｜絵カード予定表</title>
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --paper: #fffef9;
+    --ink: #202020;
+    --muted: #7a746b;
+    --line: #d7cfc2;
+    --accent: #ffb84d;
+    --accent2: #7cc7ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(circle at top, #fff8e8 0, var(--bg) 45%, #ece3d5 100%);
+    color: var(--ink);
+    font-family: "Hiragino Sans", "Yu Gothic", Meiryo, system-ui, sans-serif;
+  }
+  header {
+    padding: 18px 24px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+  }
+  h1 { margin: 0; font-size: 30px; letter-spacing: .03em; }
+  .subtitle { color: var(--muted); font-weight: 700; margin-top: 4px; }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  button {
+    border: 0;
+    border-radius: 14px;
+    padding: 10px 14px;
+    background: #fff;
+    box-shadow: 0 3px 0 rgba(0,0,0,.12);
+    font-weight: 800;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  button.blue { background: var(--accent2); }
+  button.danger { background: #ffd6d6; }
+  main { padding: 10px 18px 24px; }
+  .board {
+    background: var(--paper);
+    border: 8px solid #c9b99e;
+    border-radius: 28px;
+    padding: 18px;
+    box-shadow: 0 14px 30px rgba(61,42,16,.18);
+    max-width: 1480px;
+    margin: 0 auto;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 140px repeat(8, 1fr);
+    gap: 10px;
+    align-items: stretch;
+    margin-bottom: 14px;
+  }
+  .row:last-child { margin-bottom: 0; }
+  .row-label {
+    min-height: 170px;
+    background: #fff7dc;
+    border: 3px solid #cfc6b7;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+  }
+  .row-label::after {
+    content: "変更";
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    background: #fff;
+    border-radius: 999px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 900;
+    color: #6b6254;
+  }
+  .slot {
+    min-height: 170px;
+    background: #ffffff;
+    border: 3px dashed #cfc6b7;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .12s transform ease, .12s box-shadow ease, .12s background ease;
+  }
+  .slot:hover, .row-label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0,0,0,.10);
+  }
+  .slot.empty::before {
+    content: "＋";
+    color: #b8ad9b;
+    font-size: 44px;
+    font-weight: 900;
+  }
+  .card {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: 4px;
+    user-select: none;
+  }
+  .card img { width: 100%; height: 132px; object-fit: contain; display: block; }
+  .card .label {
+    font-size: 22px;
+    font-weight: 900;
+    text-align: center;
+    line-height: 1.1;
+    margin-top: 2px;
+  }
+  .row-label .card img { height: 118px; }
+  .row-label .card .label { font-size: 21px; }
+  .slot.done { opacity: .45; background: #eeeeee; }
+  .slot.done::after {
+    content: "できた";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #84d68b;
+    color: #07350b;
+    border-radius: 999px;
+    padding: 4px 8px;
+    font-weight: 900;
+    font-size: 14px;
+  }
+  .slot.dragging {
+    opacity: .35;
+    outline: 4px solid var(--accent);
+  }
+  .slot.drag-over {
+    background: #fff2cf;
+    outline: 4px solid var(--accent);
+  }
+  .hint {
+    max-width: 1480px;
+    margin: 10px auto 0;
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  dialog {
+    width: min(980px, 94vw);
+    border: 0;
+    border-radius: 24px;
+    padding: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  }
+  dialog::backdrop { background: rgba(0,0,0,.35); }
+  .dialog-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .dialog-head h2 { margin: 0; font-size: 24px; }
+  .picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(138px, 1fr));
+    gap: 10px;
+    max-height: 62vh;
+    overflow: auto;
+    padding: 4px;
+  }
+  .pick-card {
+    border: 3px solid #e2d9ca;
+    border-radius: 18px;
+    background: #fffdf8;
+    padding: 8px;
+    display: grid;
+    place-items: center;
+    gap: 6px;
+    cursor: pointer;
+    min-height: 150px;
+  }
+  .pick-card:hover { border-color: var(--accent); background: #fff6e3; }
+  .pick-card img { width: 112px; height: 112px; object-fit: contain; }
+  .pick-card span { font-size: 18px; font-weight: 900; text-align: center; }
+  .dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .note { color: var(--muted); font-size: 13px; font-weight: 700; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>きょうの よていボード</h1>
+    <div class="subtitle">左端の場面カードも変更できます。予定カードはドラッグで移動できます。</div>
+  </div>
+  <div class="toolbar">
+    <button class="blue" onclick="toggleDoneMode()">できたチェック: <span id="doneModeText">OFF</span></button>
+    <button onclick="saveBoard()">保存</button>
+    <button onclick="loadBoard()">読み込み</button>
+    <button class="danger" onclick="clearBoard()">ぜんぶ消す</button>
+  </div>
+</header>
+
+<main>
+  <section class="board" id="board"></section>
+  <p class="hint">
+    使い方：左端の場面カード、または空き枠をクリックしてカードを選びます。予定カードはドラッグして別の枠へ移動・入れ替えできます。
+  </p>
+</main>
+
+<dialog id="pickerDialog">
+  <div class="dialog-head">
+    <h2 id="pickerTitle">どの絵カードにしますか？</h2>
+    <button onclick="closePicker()">閉じる</button>
+  </div>
+  <div class="picker" id="picker"></div>
+  <div class="dialog-actions">
+    <button class="danger" id="removeButton" onclick="removeCard()">この枠を空にする</button>
+    <div class="note">画像一覧は cards/cards.json から読み込んでいます。</div>
+  </div>
+</dialog>
+
+<script>
+let cardMaster = [];
+
+const rows = [
+  { id: "row1", defaultLabelCardId: "morning" },
+  { id: "row2", defaultLabelCardId: "daytime" },
+  { id: "row3", defaultLabelCardId: "night" }
+];
+
+const SLOT_COUNT = 8;
+let boardData = {};
+let rowLabelData = {};
+let selectedSlotKey = null;
+let selectedRowId = null;
+let pickerMode = "slot";
+let doneMode = false;
+let draggedSlotKey = null;
+
+async function loadCardMaster() {
+  try {
+    const response = await fetch("cards/cards.json?ts=" + Date.now());
+    cardMaster = await response.json();
+    cardMaster = cardMaster.map(card => ({
+      ...card,
+      image: card.image.startsWith("cards/") ? card.image : "cards/" + card.image
+    }));
+  } catch (error) {
+    alert("cards/cards.json を読み込めませんでした。GitHub Pages上で開いてください。");
+    console.error(error);
+  }
+}
+
+function initData() {
+  rows.forEach(row => {
+    if (!rowLabelData[row.id]) rowLabelData[row.id] = row.defaultLabelCardId;
+
+    for (let i = 0; i < SLOT_COUNT; i++) {
+      const key = `${row.id}-${i}`;
+      if (!boardData[key]) boardData[key] = { cardId: null, done: false };
+    }
+  });
+}
+
+function getCard(cardId) {
+  return cardMaster.find(c => c.id === cardId);
+}
+
+function cardHtml(card) {
+  if (!card) return "";
+  return `
+    <div class="card">
+      <img src="${card.image}" alt="${card.label}">
+      <div class="label">${card.label}</div>
+    </div>
+  `;
+}
+
+function renderBoard() {
+  initData();
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+
+  rows.forEach(row => {
+    const rowEl = document.createElement("div");
+    rowEl.className = "row";
+
+    const labelEl = document.createElement("div");
+    labelEl.className = "row-label";
+    labelEl.onclick = () => openRowLabelPicker(row.id);
+    labelEl.innerHTML = cardHtml(getCard(rowLabelData[row.id]));
+    rowEl.appendChild(labelEl);
+
+    for (let i = 0; i < SLOT_COUNT; i++) {
+      const key = `${row.id}-${i}`;
+      const slot = document.createElement("div");
+      const data = boardData[key] || { cardId: null, done: false };
+      slot.className = "slot" + (!data.cardId ? " empty" : "") + (data.done ? " done" : "");
+      slot.dataset.key = key;
+      slot.onclick = () => onSlotClick(key);
+
+      slot.draggable = !!data.cardId && !doneMode;
+      slot.ondragstart = event => onDragStart(event, key);
+      slot.ondragover = event => onDragOver(event);
+      slot.ondragleave = event => onDragLeave(event);
+      slot.ondrop = event => onDrop(event, key);
+      slot.ondragend = event => onDragEnd(event);
+
+      if (data.cardId) slot.innerHTML = cardHtml(getCard(data.cardId));
+      rowEl.appendChild(slot);
+    }
+    board.appendChild(rowEl);
+  });
+}
+
+function renderPicker() {
+  const picker = document.getElementById("picker");
+  picker.innerHTML = "";
+  cardMaster.forEach(card => {
+    const el = document.createElement("div");
+    el.className = "pick-card";
+    el.innerHTML = `<img src="${card.image}" alt="${card.label}"><span>${card.label}</span>`;
+    el.onclick = () => selectCard(card.id);
+    picker.appendChild(el);
+  });
+}
+
+function openPicker(title, mode) {
+  pickerMode = mode;
+  document.getElementById("pickerTitle").textContent = title;
+  document.getElementById("removeButton").style.display = mode === "slot" ? "inline-block" : "none";
+  renderPicker();
+  document.getElementById("pickerDialog").showModal();
+}
+
+function openRowLabelPicker(rowId) {
+  selectedRowId = rowId;
+  selectedSlotKey = null;
+  openPicker("この行の場面カードを選んでください", "rowLabel");
+}
+
+function onSlotClick(key) {
+  if (draggedSlotKey) return;
+  selectedSlotKey = key;
+  selectedRowId = null;
+
+  if (doneMode) {
+    boardData[key].done = !boardData[key].done;
+    renderBoard();
+    autoSave();
+    return;
+  }
+
+  openPicker("この枠に入れる絵カードを選んでください", "slot");
+}
+
+function selectCard(cardId) {
+  if (pickerMode === "rowLabel" && selectedRowId) {
+    rowLabelData[selectedRowId] = cardId;
+  }
+
+  if (pickerMode === "slot" && selectedSlotKey) {
+    boardData[selectedSlotKey] = { cardId, done: false };
+  }
+
+  closePicker();
+  renderBoard();
+  autoSave();
+}
+
+function removeCard() {
+  if (pickerMode !== "slot" || !selectedSlotKey) return;
+  boardData[selectedSlotKey] = { cardId: null, done: false };
+  closePicker();
+  renderBoard();
+  autoSave();
+}
+
+function closePicker() {
+  document.getElementById("pickerDialog").close();
+  selectedSlotKey = null;
+  selectedRowId = null;
+}
+
+function onDragStart(event, key) {
+  if (doneMode || !boardData[key].cardId) {
+    event.preventDefault();
+    return;
+  }
+  draggedSlotKey = key;
+  event.dataTransfer.effectAllowed = "move";
+  event.dataTransfer.setData("text/plain", key);
+  setTimeout(() => {
+    const el = document.querySelector(`[data-key="${key}"]`);
+    if (el) el.classList.add("dragging");
+  }, 0);
+}
+
+function onDragOver(event) {
+  event.preventDefault();
+  event.currentTarget.classList.add("drag-over");
+  event.dataTransfer.dropEffect = "move";
+}
+
+function onDragLeave(event) {
+  event.currentTarget.classList.remove("drag-over");
+}
+
+function onDrop(event, targetKey) {
+  event.preventDefault();
+  event.currentTarget.classList.remove("drag-over");
+
+  const sourceKey = event.dataTransfer.getData("text/plain") || draggedSlotKey;
+  if (!sourceKey || sourceKey === targetKey) return;
+
+  const sourceData = boardData[sourceKey];
+  const targetData = boardData[targetKey];
+
+  boardData[targetKey] = sourceData;
+  boardData[sourceKey] = targetData || { cardId: null, done: false };
+
+  draggedSlotKey = null;
+  renderBoard();
+  autoSave();
+}
+
+function onDragEnd() {
+  document.querySelectorAll(".slot").forEach(el => {
+    el.classList.remove("dragging", "drag-over");
+  });
+  draggedSlotKey = null;
+}
+
+function toggleDoneMode() {
+  doneMode = !doneMode;
+  document.getElementById("doneModeText").textContent = doneMode ? "ON" : "OFF";
+  renderBoard();
+}
+
+function saveBoard() {
+  const saveData = { boardData, rowLabelData };
+  localStorage.setItem("akariScheduleBoardV3", JSON.stringify(saveData));
+  alert("保存しました");
+}
+
+function autoSave() {
+  const saveData = { boardData, rowLabelData };
+  localStorage.setItem("akariScheduleBoardV3", JSON.stringify(saveData));
+}
+
+function loadBoard() {
+  const savedV3 = localStorage.getItem("akariScheduleBoardV3");
+  if (savedV3) {
+    const parsed = JSON.parse(savedV3);
+    boardData = parsed.boardData || {};
+    rowLabelData = parsed.rowLabelData || {};
+  } else {
+    const oldSaved = localStorage.getItem("akariScheduleBoard");
+    if (oldSaved) boardData = JSON.parse(oldSaved);
+  }
+  initData();
+  renderBoard();
+}
+
+function clearBoard() {
+  if (!confirm("予定をすべて消しますか？")) return;
+  boardData = {};
+  rowLabelData = {};
+  initData();
+  autoSave();
+  renderBoard();
+}
+
+async function startApp() {
+  await loadCardMaster();
+  initData();
+  loadBoard();
+  renderBoard();
+}
+
+startApp();
+</script>
+</body>
+</html>
