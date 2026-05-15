@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect x="18" y="18" width="476" height="476" rx="48" fill="#fffdf8" stroke="#2b2b2b" stroke-width="12"/>
+  <rect x="42" y="42" width="428" height="300" rx="36" fill="#f3f7ff"/>
+  <text x="256" y="242" text-anchor="middle" dominant-baseline="middle" font-size="138" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif">📺</text>
+  <text x="256" y="418" text-anchor="middle" dominant-baseline="middle" font-size="54" font-weight="700" font-family="Hiragino Sans, Yu Gothic, Meiryo, sans-serif" fill="#202020">テレビ</text>
+</svg>
