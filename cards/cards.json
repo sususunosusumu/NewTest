@@ -1,0 +1,242 @@
+[
+  {
+    "id": "asa",
+    "label": "あさ",
+    "image": "0_asa.png"
+  },
+  {
+    "id": "ohiru",
+    "label": "おひる",
+    "image": "0_ohiru.png"
+  },
+  {
+    "id": "yoru",
+    "label": "よる",
+    "image": "0_yoru.png"
+  },
+  {
+    "id": "asaokiru",
+    "label": "あさおきる",
+    "image": "1_asaokiru.png"
+  },
+  {
+    "id": "hamigaki",
+    "label": "はみがき",
+    "image": "1_hamigaki.png"
+  },
+  {
+    "id": "hukuwotatamu",
+    "label": "ふくをたたむ",
+    "image": "1_hukuwotatamu.png"
+  },
+  {
+    "id": "iedegorogoro",
+    "label": "いえでごろごろ",
+    "image": "1_iedegorogoro.png"
+  },
+  {
+    "id": "iphone",
+    "label": "iPhone",
+    "image": "1_iPhone.png"
+  },
+  {
+    "id": "kaowoarau",
+    "label": "かおをあらう",
+    "image": "1_kaowoarau.png"
+  },
+  {
+    "id": "katazuke",
+    "label": "かたづけ",
+    "image": "1_katazuke.png"
+  },
+  {
+    "id": "kigae1",
+    "label": "きがえる",
+    "image": "1_kigae1.png"
+  },
+  {
+    "id": "kigae2",
+    "label": "きがえる2",
+    "image": "1_kigae2.png"
+  },
+  {
+    "id": "ofuro",
+    "label": "おふろ",
+    "image": "1_ofuro.png"
+  },
+  {
+    "id": "tearai",
+    "label": "てあらい",
+    "image": "1_tearai.png"
+  },
+  {
+    "id": "toilet",
+    "label": "トイレ",
+    "image": "1_toilet.png"
+  },
+  {
+    "id": "yoruneru",
+    "label": "よるねる",
+    "image": "1_yoruneru.png"
+  },
+  {
+    "id": "curry",
+    "label": "カレー",
+    "image": "2_curry.png"
+  },
+  {
+    "id": "meatspagetty",
+    "label": "ミートスパゲティ",
+    "image": "2_meatspagetty.png"
+  },
+  {
+    "id": "natto_gohan",
+    "label": "なっとうごはん",
+    "image": "2_natto_gohan.svg"
+  },
+  {
+    "id": "shio_ramen_set",
+    "label": "しおラーメン",
+    "image": "2_shio_ramen_set.svg"
+  },
+  {
+    "id": "yakiniku",
+    "label": "やきにく",
+    "image": "2_yakiniku.png"
+  },
+  {
+    "id": "bentou",
+    "label": "おべんとう",
+    "image": "2_bentou.png"
+  },
+  {
+    "id": "sentaku",
+    "label": "せんたく",
+    "image": "3_sentaku.png"
+  },
+  {
+    "id": "osouji",
+    "label": "おそうじ",
+    "image": "3_osouji.png"
+  },
+  {
+    "id": "kobayashi",
+    "label": "こばやし",
+    "image": "4_kobayashi.png"
+  },
+  {
+    "id": "pokkenoouchi",
+    "label": "ぽっけのおうち",
+    "image": "4_pokkenoouchi.png"
+  },
+  {
+    "id": "rarara",
+    "label": "ららら",
+    "image": "4_rarara.png"
+  },
+  {
+    "id": "school",
+    "label": "がっこう",
+    "image": "4_school.png"
+  },
+  {
+    "id": "shinanogakuen",
+    "label": "しなのがくえん",
+    "image": "4_shinanogakuen.png"
+  },
+  {
+    "id": "tanpopo",
+    "label": "たんぽぽ",
+    "image": "4_tanpopo.png"
+  },
+  {
+    "id": "wakuwaku",
+    "label": "わくわく",
+    "image": "4_wakuwaku.png"
+  },
+  {
+    "id": "yuuseiryou",
+    "label": "ゆうせいりょう",
+    "image": "4_yuuseiryou.png"
+  },
+  {
+    "id": "book",
+    "label": "ほん",
+    "image": "5_book.png"
+  },
+  {
+    "id": "daiso",
+    "label": "ダイソー",
+    "image": "5_daiso.png"
+  },
+  {
+    "id": "densha",
+    "label": "でんしゃ",
+    "image": "5_densha.png"
+  },
+  {
+    "id": "hospital",
+    "label": "びょういん",
+    "image": "5_hospital.png"
+  },
+  {
+    "id": "konbini",
+    "label": "コンビニ",
+    "image": "5_konbini.png"
+  },
+  {
+    "id": "kouen",
+    "label": "こうえん",
+    "image": "5_kouen.png"
+  },
+  {
+    "id": "mac",
+    "label": "マクドナルド",
+    "image": "5_mac.png"
+  },
+  {
+    "id": "mizuasobi",
+    "label": "みずあそび",
+    "image": "5_mizuasobi.png"
+  },
+  {
+    "id": "nbox",
+    "label": "くるま",
+    "image": "5_nbox.png"
+  },
+  {
+    "id": "stepwagon",
+    "label": "ステップワゴン",
+    "image": "5_stepwagon.png"
+  },
+  {
+    "id": "super",
+    "label": "スーパー",
+    "image": "5_super.png"
+  },
+  {
+    "id": "sushi",
+    "label": "すし",
+    "image": "5_sushi.png"
+  },
+  {
+    "id": "tenhou",
+    "label": "てんほう",
+    "image": "5_tenhou.png"
+  },
+  {
+    "id": "tranporin",
+    "label": "トランポリン",
+    "image": "5_tranporin.png"
+  },
+  {
+    "id": "tsuruha",
+    "label": "ツルハ",
+    "image": "5_tsuruha.png"
+  },
+  {
+    "id": "senzai",
+    "label": "せんざい",
+    "image": "5_senzai.png"
+  }
+]
